@@ -64,6 +64,9 @@ export async function getProductsList(
     ];
     return {
         statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "https://dyzw59fxpwli2.cloudfront.net"
+        },
         body: JSON.stringify(productsList),
     };
 }

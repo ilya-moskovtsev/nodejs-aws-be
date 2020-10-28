@@ -66,6 +66,9 @@ export async function getProductsById(
     const result = productsList.filter(product => product.id == id);
     return {
         statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "https://dyzw59fxpwli2.cloudfront.net"
+        },
         body: JSON.stringify(result),
     };
 }
