@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-aws-be",
+  "name": "product-service",
   "version": "0.1.0",
-  "description": "A TypeScript starter for Serverless Framework",
+  "description": "",
   "main": "handler.js",
   "scripts": {
     "test": "serverless-bundle test"
@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AnomalyInnovations/serverless-typescript-starter.git"
+    "url": "https://github.com/ilya-moskovtsev/nodejs-aws-be.git"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.64",

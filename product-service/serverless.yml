@@ -1,5 +1,5 @@
 # NOTE: update this with your service name
-service: nodejs-aws-be
+service: product-service
 
 # Create an optimized package for our functions 
 package:
