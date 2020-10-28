@@ -78,13 +78,23 @@ export async function getProductsById(
             "imageTitle": "Image title 8"
         }
     ];
-    const id = event.pathParameters.id;
-    const result = productsList.filter(product => product.id == id);
-    return {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "https://dyzw59fxpwli2.cloudfront.net"
-        },
-        body: JSON.stringify(result),
-    };
+    try {
+        const id = event.pathParameters.id;
+        const result = productsList.filter(product => product.id == id);
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify(result),
+        };
+    } catch (e) {
+        return {
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: "Product not found",
+        };
+    }
 }
