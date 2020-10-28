@@ -5,6 +5,16 @@ Install npm packages
 $ npm install
 ```
 
+Run function locally
+``` bash
+$ serverless invoke local --function getProductsList
+```
+
+Run tests
+``` bash
+$ npm test
+```
+
 Deploy project
 ``` bash
 $ serverless deploy
