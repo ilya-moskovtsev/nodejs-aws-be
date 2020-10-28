@@ -24,3 +24,5 @@ Deploy a single function
 ``` bash
 $ serverless deploy function --function getProductsById
 ```
+
+Swagger file is hosted at https://app.swaggerhub.com/apis/ilya-moskovtsev/dev-product_service/2020-10-28
