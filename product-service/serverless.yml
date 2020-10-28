@@ -30,3 +30,9 @@ functions:
       - http:
           path: products
           method: get
+  getProductsById:
+    handler: handler.getProductsById
+    events:
+      - http:
+          path: products/{id}
+          method: get
