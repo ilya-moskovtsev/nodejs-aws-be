@@ -1,5 +1,5 @@
 import {Context, APIGatewayEvent, APIGatewayProxyResult} from "aws-lambda";
-import {getAllProductsWithDelay} from "products";
+import {getAllProductsWithDelay} from "service/products";
 
 export async function getProductsList(
     event: APIGatewayEvent,

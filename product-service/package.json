@@ -19,5 +19,10 @@
     "serverless-dotenv-plugin": "^3.0.0",
     "serverless-offline": "^6.8.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "jest": {
+    "moduleNameMapper": {
+      "products": "<rootDir>/service/products.ts"
+    }
+  }
 }
