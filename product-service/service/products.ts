@@ -1,5 +1,3 @@
-import {Product} from "../model/Product";
-
 const products: Product[] = [
     {
         count: 4,
