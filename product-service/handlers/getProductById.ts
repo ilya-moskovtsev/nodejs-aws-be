@@ -1,7 +1,7 @@
 import {Context, APIGatewayEvent, APIGatewayProxyResult} from "aws-lambda";
-import {getProductsByIdWithDelay} from "service/products";
+import {getProductByIdWithDelay} from "service/products";
 
-export async function getProductsById(
+export async function getProductById(
     event: APIGatewayEvent,
     context: Context
 ): Promise<APIGatewayProxyResult> {
@@ -11,7 +11,7 @@ export async function getProductsById(
             headers: {
                 "Access-Control-Allow-Origin": "*"
             },
-            body: JSON.stringify(await getProductsByIdWithDelay(event.pathParameters.id, 10)),
+            body: JSON.stringify(await getProductByIdWithDelay(event.pathParameters.id, 10)),
         };
     } catch (e) {
         return {

@@ -86,10 +86,10 @@ export function getAllProductsWithDelay(ms: number): Promise<Product[]> {
     });
 }
 
-export function getProductsByIdWithDelay(id: string, ms: number): Promise<Product[]> {
+export function getProductByIdWithDelay(id: string, ms: number): Promise<Product> {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const result = products.filter(product => product.id === id);
+            const result = products.find(product => product.id === id);
             if (isEmpty(result)) {
                 reject();
             } else {
