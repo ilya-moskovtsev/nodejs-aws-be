@@ -1,5 +1,6 @@
 import {Context, APIGatewayEvent, APIGatewayProxyResult} from "aws-lambda";
 import {getAllProductsWithDelay} from "service/products";
+import {corsHeaders} from "../constants/headers";
 
 export async function getProductsList(
     event: APIGatewayEvent,
@@ -8,17 +9,13 @@ export async function getProductsList(
     try {
         return {
             statusCode: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*"
-            },
+            headers: corsHeaders,
             body: JSON.stringify(await getAllProductsWithDelay(40)),
         };
     } catch (e) {
         return {
             statusCode: 400,
-            headers: {
-                "Access-Control-Allow-Origin": "*"
-            },
+            headers: corsHeaders,
             body: "Products not found",
         };
     }
