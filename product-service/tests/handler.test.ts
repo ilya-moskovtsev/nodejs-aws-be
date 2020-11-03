@@ -20,6 +20,6 @@ test("getProductById", async () => {
 
     const response = await handler.getProductById(event, context);
 
-    expect(response.statusCode).toEqual(200);
+    expect(response.statusCode).toEqual(400);
     expect(typeof response.body).toBe("string");
 });

@@ -15,7 +15,7 @@ export async function getProductById(
         };
     } catch (e) {
         return {
-            statusCode: 200,
+            statusCode: 400,
             headers: {
                 "Access-Control-Allow-Origin": "*"
             },
