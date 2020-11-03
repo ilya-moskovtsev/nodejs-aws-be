@@ -1,0 +1,72 @@
+openapi: 3.0.1
+info:
+  title: dev-product-service
+  description: "This is a simple server Product Service."
+  version: '2020-10-28'
+servers:
+  - url: 'https://sy6ni7vd5i.execute-api.us-east-1.amazonaws.com/{basePath}'
+    variables:
+      basePath:
+        default: dev
+paths:
+  '/products/{id}':
+    get:
+      tags:
+          - product
+      summary: Find product by ID
+      description: Returns a single product
+      operationId: getProductById
+      parameters:
+        - name: id
+          in: path
+          description: ID of product to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+  /products:
+    get:
+      tags:
+          - product
+      summary: Returns all products
+      operationId: getProductsList
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          description: Products not found
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        count:
+          type: integer
+          format: int64
+        description:
+          type: string
+        id:
+          type: string
+        price:
+          type: number
+          format: double
+        title:
+          type: string
+        imageUrl:
+          type: string
+        imageTitle:
+          type: string
