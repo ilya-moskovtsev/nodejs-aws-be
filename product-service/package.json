@@ -1,0 +1,28 @@
+{
+  "name": "product-service",
+  "version": "0.1.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "serverless-bundle test"
+  },
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ilya-moskovtsev/nodejs-aws-be.git"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.64",
+    "@types/jest": "^26.0.14",
+    "serverless-bundle": "3.2.1",
+    "serverless-dotenv-plugin": "^3.0.0",
+    "serverless-offline": "^6.8.0"
+  },
+  "dependencies": {},
+  "jest": {
+    "moduleNameMapper": {
+      "products": "<rootDir>/service/products.ts"
+    }
+  }
+}
