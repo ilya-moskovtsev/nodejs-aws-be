@@ -92,4 +92,14 @@ values ('7567ec4b-b10c-48c5-9345-fc73c48a80aa',
        ('7567ec4b-b10c-45c5-9345-fc73c48a80a1',
         3);
 
+-- getProductsList
+select count, description, p.id as id, price, title, image_url, image_title
+from products p
+         join stocks s on p.id = s.product_id;
+
+-- getProductById
+select count, description, p.id as id, price, title, image_url, image_title
+from products p
+         join stocks s on p.id = s.product_id
+where p.id = ?;
 

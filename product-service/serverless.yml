@@ -41,3 +41,9 @@ functions:
           path: products/{id}
           method: get
           cors: true
+
+custom:
+  bundle:
+    linting: false
+    ignorePackages:
+      - pg-native
