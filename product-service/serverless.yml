@@ -41,6 +41,13 @@ functions:
           path: products/{id}
           method: get
           cors: true
+  addProduct:
+    handler: handler.addProduct
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
 
 custom:
   bundle:

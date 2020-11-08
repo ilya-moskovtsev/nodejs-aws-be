@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: dev-product-service
   description: "This is a simple server Product Service."
-  version: '2020-10-28'
+  version: '2020-11-08'
 servers:
   - url: 'https://sy6ni7vd5i.execute-api.us-east-1.amazonaws.com/{basePath}'
     variables:
@@ -12,7 +12,7 @@ paths:
   '/products/{id}':
     get:
       tags:
-          - product
+        - product
       summary: Find product by ID
       description: Returns a single product
       operationId: getProductById
@@ -35,7 +35,7 @@ paths:
   /products:
     get:
       tags:
-          - product
+        - product
       summary: Returns all products
       operationId: getProductsList
       responses:
@@ -49,6 +49,21 @@ paths:
                   $ref: '#/components/schemas/Product'
         '400':
           description: Products not found
+    post:
+      tags:
+        - product
+      summary: Create product
+      operationId: addProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        description: Created product object
+        required: true
+      responses:
+        default:
+          description: successful operation
 components:
   schemas:
     Product:
@@ -66,7 +81,7 @@ components:
           format: double
         title:
           type: string
-        imageUrl:
+        image_url:
           type: string
-        imageTitle:
+        image_title:
           type: string

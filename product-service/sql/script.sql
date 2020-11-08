@@ -2,9 +2,11 @@ create database store;
 
 create schema if not exists public;
 
+create extension "uuid-ossp";
+
 create table if not exists products
 (
-    id          uuid primary key,
+    id          uuid primary key default uuid_generate_v4(),
     title       text not null,
     description text,
     price       numeric,
@@ -103,3 +105,14 @@ from products p
          join stocks s on p.id = s.product_id
 where p.id = ?;
 
+-- addProduct
+insert into products (id, title, description, price, image_url, image_title)
+values ('7567ec4b-b10c-48c5-9345-fc73c48a80aa',
+        'Product Title 1',
+        'Short Product Description 1',
+        2.4,
+        'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
+        'Image title 1')
+returning id;
+insert into stocks (product_id, count)
+values ('7567ec4b-b10c-48c5-9345-fc73c48a80aa', 4);
