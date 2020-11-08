@@ -19,9 +19,12 @@ provider:
   # rename env.example to .env and uncomment
   # the following line. Also, make sure to not
   # commit your .env.
-  #
-  #environment:
-  #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
+  environment:
+    PG_HOST: ${env:PG_HOST}
+    PG_PORT: ${env:PG_PORT}
+    PG_DATABASE: ${env:PG_DATABASE}
+    PG_USERNAME: ${env:PG_USERNAME}
+    PG_PASSWORD: ${env:PG_PASSWORD}
 
 functions:
   getProductsList:
