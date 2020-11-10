@@ -17,12 +17,12 @@ export async function getProductsList(
     event: APIGatewayEvent,
     context: Context
 ): Promise<APIGatewayProxyResult> {
-    console.log(event);
+    console.log('event', event);
 
     const client = new Client(dbOptions);
-    await client.connect();
-
     try {
+        await client.connect();
+
         const {rows: products} = await client.query(`
             select count, description, p.id as id, price, title, image_url, image_title
             from products p

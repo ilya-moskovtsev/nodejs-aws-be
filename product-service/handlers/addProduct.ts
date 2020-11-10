@@ -50,9 +50,9 @@ export async function addProduct(
     } = parsedBody;
 
     const client = new Client(dbOptions);
-    await client.connect();
-
     try {
+        await client.connect();
+
         await client.query('BEGIN');
 
         const product = await client.query(`
