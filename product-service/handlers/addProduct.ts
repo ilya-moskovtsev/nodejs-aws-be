@@ -55,16 +55,11 @@ export async function addProduct(
 
         await client.query('BEGIN');
 
-        const product = await client.query(`
-            insert into products (id, title, description, price, image_url, image_title)
-            values ('${id || uuidv4()}',
-                    '${title}',
-                    '${description}',
-                    ${price},
-                    '${image_url}',
-                    '${image_title}')
-            returning id;
-        `);
+        const text = `insert into products (id, title, description, price, image_url, image_title)
+                      values ($1, $2, $3, $4, $5, $6)
+                      returning id;`;
+        const values = [id || uuidv4(), title, description, price, image_url, image_title];
+        const product = await client.query(text, values);
 
         console.log(product);
 

@@ -24,12 +24,14 @@ export async function getProductById(
     try {
         await client.connect();
 
-        const {rows: products} = await client.query(`
+        const text = `
             select count, description, p.id as id, price, title, image_url, image_title
             from products p
                      join stocks s on p.id = s.product_id
-            where p.id = '${event.pathParameters.id}';
-        `);
+            where p.id = $1;
+        `;
+        const values = [event.pathParameters.id];
+        const {rows: products} = await client.query(text, values);
         console.log(products[0]);
 
         if (products[0]) {

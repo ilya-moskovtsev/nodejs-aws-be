@@ -23,11 +23,12 @@ export async function getProductsList(
     try {
         await client.connect();
 
-        const {rows: products} = await client.query(`
+        const text = `
             select count, description, p.id as id, price, title, image_url, image_title
             from products p
                      join stocks s on p.id = s.product_id;
-        `);
+        `;
+        const {rows: products} = await client.query(text);
         console.log(products);
 
         return {
