@@ -4,6 +4,6 @@ interface Product {
     id: string;
     price: number;
     title: string;
-    imageUrl: string;
-    imageTitle: string;
+    image_url: string;
+    image_title: string;
 }

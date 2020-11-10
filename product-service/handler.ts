@@ -1,4 +1,5 @@
 import {getProductsList} from './handlers/getProductsList';
 import {getProductById} from './handlers/getProductById';
+import {addProduct} from './handlers/addProduct';
 
-export {getProductsList, getProductById};
+export {getProductsList, getProductById, addProduct};
