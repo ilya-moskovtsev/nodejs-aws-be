@@ -23,10 +23,29 @@ provider:
   #environment:
   #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
 
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: "s3:ListBucket"
+      Resource:
+        - "arn:aws:s3:::ilymos-task-5"
+    - Effect: "Allow"
+      Action: "s3:*"
+      Resource:
+        - "arn:aws:s3:::ilymos-task-5/*"
+
 functions:
-  hello:
-    handler: handler.hello
+  importProductsFile:
+    handler: handler.importProductsFile
     events:
       - http:
-          path: hello
+          path: import
           method: get
+          request:
+            parameters:
+              querystrings:
+                name: true
+          cors: true
+
+custom:
+  bundle:
+    linting: false
