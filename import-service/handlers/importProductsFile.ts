@@ -1,6 +1,6 @@
 import {APIGatewayEvent, APIGatewayProxyResult, Context} from "aws-lambda";
 import {corsHeaders} from "../constants/headers";
-import S3 from 'aws-sdk/clients/s3';
+import {S3} from 'aws-sdk';
 
 const BUCKET = 'ilymos-task-5';
 
