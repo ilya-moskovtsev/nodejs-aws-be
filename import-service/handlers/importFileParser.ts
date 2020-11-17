@@ -1,6 +1,7 @@
 import {Context, S3Event} from "aws-lambda";
 import AWS from 'aws-sdk';
 import csv from 'csv-parser';
+import {corsHeaders} from "../constants/headers";
 
 const BUCKET = 'ilymos-task-5';
 
@@ -43,4 +44,10 @@ export async function importFileParser(
         console.error('Failed to parse products file');
         console.error(err);
     }
+
+    return {
+        statusCode: 202,
+        headers: corsHeaders,
+        body: '',
+    };
 }
