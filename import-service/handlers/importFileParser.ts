@@ -12,6 +12,7 @@ export async function importFileParser(
     console.log('event', JSON.stringify(event, null, 2));
     try {
         const s3 = new AWS.S3({region: 'us-east-1'});
+        const sqs = new AWS.SQS({region: 'us-east-1'});
         for (const record of event.Records) {
             console.log("record.s3.object.key", record.s3.object.key);
             const s3Stream = s3.getObject({
@@ -20,8 +21,19 @@ export async function importFileParser(
             }).createReadStream();
 
             await new Promise((resolve, reject) => {
-                s3Stream.pipe(csv())
-                    .on('data', (data) => console.log(data))
+                s3Stream.pipe(csv({separator: ';'}))
+                    .on('data', (data) => {
+                        sqs.sendMessage({
+                            QueueUrl: process.env.SQS_URL,
+                            MessageBody: JSON.stringify(data)
+                        }, (err, data) => {
+                            if (err) {
+                                console.error('Error while sending CSV record into SQS', err);
+                            } else {
+                                console.log('Successfully sent CSV record into SQS', data);
+                            }
+                        });
+                    })
                     .on('error', (error) => {
                         console.error(error);
                         reject(error);
