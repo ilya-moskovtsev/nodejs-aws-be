@@ -24,9 +24,9 @@ export async function catalogBatchProcess(
 ) {
     console.log('event', event);
     try {
-        const client = new Client(dbOptions);
         await Promise.all(
             event.Records.map(async (record) => {
+                const client = new Client(dbOptions);
                 try {
                     const parsedProduct = JSON.parse(record.body);
                     const validation = new Validator(parsedProduct, productRules);
