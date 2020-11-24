@@ -6,7 +6,7 @@ import Validator from 'validatorjs';
 import {Client} from "pg";
 import {v4 as uuidv4} from 'uuid';
 
-const {PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD} = process.env;
+const {PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD, SNS_TOPIC_ARN} = process.env;
 const dbOptions = {
     host: PG_HOST,
     port: PG_PORT,
@@ -77,7 +77,7 @@ export async function catalogBatchProcess(
     sns.publish({
         Subject: 'Products added',
         Message: JSON.stringify(products),
-        TopicArn: process.env.SNS_ARN
+        TopicArn: SNS_TOPIC_ARN
     }, (err, data) => {
         if (err) {
             console.error('Error while publishing to topic', err);

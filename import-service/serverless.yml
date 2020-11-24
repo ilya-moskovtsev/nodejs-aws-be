@@ -1,7 +1,7 @@
 # NOTE: update this with your service name
 service: import-service
 
-# Create an optimized package for our functions 
+# Create an optimized package for our functions
 package:
   individually: true
 
@@ -13,6 +13,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
+  profile: iam_admin_user
   stage: dev
   region: us-east-1
   # To load environment variables externally
@@ -21,8 +22,7 @@ provider:
   # commit your .env.
   #
   environment:
-    SQS_URL:
-      Ref: SQSQueue
+    SQS_URL: ${self:custom.SQS_URL}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -33,6 +33,20 @@ provider:
       Action: "s3:*"
       Resource:
         - "arn:aws:s3:::ilymos-task-5/*"
+    - Effect: 'Allow'
+      Action: 'sqs:*'
+      Resource: ${self:custom.SQS_ARN}
+
+resources:
+  Resources:
+    SQS:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogBatchProcess
+        ReceiveMessageWaitTimeSeconds: 20
+  Outputs:
+    sqsArn:
+      Value: ${self:custom.SQS_ARN}
 
 functions:
   importProductsFile:
@@ -59,3 +73,9 @@ functions:
 custom:
   bundle:
     linting: false
+  SQS_URL:
+    Ref: SQS
+  SQS_ARN:
+    Fn::GetAtt:
+      - SQS
+      - Arn

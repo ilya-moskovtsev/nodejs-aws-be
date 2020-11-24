@@ -26,36 +26,35 @@ provider:
     PG_DATABASE: ${env:PG_DATABASE}
     PG_USERNAME: ${env:PG_USERNAME}
     PG_PASSWORD: ${env:PG_PASSWORD}
-    SNS_ARN:
-      Ref: SNSTopic
+    SNS_TOPIC_ARN: ${self:custom.SNS_TOPIC_ARN}
 
   iamRoleStatements:
     - Effect: "Allow"
-      Action: "sqs:*"
-      Resource:
-        - Fn::GetAtt: [ SQSQueue, Arn ]
-    - Effect: "Allow"
       Action: "sns:*"
-      Resource:
-        Ref: SNSTopic
+      Resource: ${self:custom.SNS_TOPIC_ARN}
 
 resources:
   Resources:
-    SQSQueue:
-      Type: AWS::SQS::Queue
-      Properties:
-        QueueName: catalogItemsQueue
     SNSTopic:
       Type: AWS::SNS::Topic
       Properties:
+        DisplayName: SNS Topic
         TopicName: createProductTopic
     SNSSubscription:
       Type: AWS::SNS::Subscription
       Properties:
-        Endpoint: ilya.moskovtsev+1@gmail.com
         Protocol: email
-        TopicArn:
-          Ref: SNSTopic
+        TopicArn: ${self:custom.SNS_TOPIC_ARN}
+        Endpoint: ${env:SNS_SUBSCRIPTION_ENDPOINT_EMAIL}
+    SNSSubscriptionWithFilter:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        TopicArn: ${self:custom.SNS_TOPIC_ARN}
+        Endpoint: ${env:SNS_SUBSCRIPTION_ENDPOINT_EMAIL_WITH_FILTER}
+        FilterPolicy:
+          count:
+            - 1
 
 functions:
   getProductsList:
@@ -84,13 +83,13 @@ functions:
     events:
       - sqs:
           batchSize: 5
-          arn:
-            Fn::GetAtt:
-              - SQSQueue
-              - Arn
+          arn: ${self:custom.SQS_ARN}
 
 custom:
   bundle:
     linting: false
     ignorePackages:
       - pg-native
+  SNS_TOPIC_ARN:
+    Ref: SNSTopic
+  SQS_ARN: ${cf:import-service-${self:provider.stage}.sqsArn}
