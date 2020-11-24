@@ -31,7 +31,6 @@ export async function importProductsFile(
             Bucket: BUCKET,
             Key: filePath,
             Expires: 60,
-            ContentType: 'text/csv',
         };
 
         return new Promise((resolve, reject) => {
