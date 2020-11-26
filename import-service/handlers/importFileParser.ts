@@ -11,8 +11,8 @@ export async function importFileParser(
 ) {
     console.log('event', JSON.stringify(event, null, 2));
     try {
-        const s3 = new AWS.S3({region: 'us-east-1'});
-        const sqs = new AWS.SQS({region: 'us-east-1'});
+        const s3 = new AWS.S3({region: process.env.REGION});
+        const sqs = new AWS.SQS({region: process.env.REGION});
         for (const record of event.Records) {
             console.log("record.s3.object.key", record.s3.object.key);
             const s3Stream = s3.getObject({
