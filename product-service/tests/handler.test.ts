@@ -59,8 +59,8 @@ test("catalogBatchProcess", async () => {
     expect(console.log).toBeCalledWith('event', event);
     expect(spy1).toBeCalledTimes(1);
     expect(spy2).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith(`adding product ${product1} to db`);
-    expect(console.log).toBeCalledWith(`adding product ${product2} to db`);
+    expect(console.log).toBeCalledWith(`Will add ${product1} to db`);
+    expect(console.log).toBeCalledWith(`Will add ${product2} to db`);
 
 
     AWSMock.restore('SNS');
