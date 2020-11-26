@@ -1,6 +1,7 @@
 import {APIGatewayEvent, Context, SQSEvent} from "aws-lambda";
 import * as handler from "../handler";
-import {Client} from "pg";
+import * as AWSMock from "aws-sdk-mock";
+import * as AWS from "aws-sdk";
 
 test("getProductsList", async () => {
     const event = {body: "Test Body"} as APIGatewayEvent;
@@ -26,14 +27,20 @@ test("getProductById", async () => {
 });
 
 test("catalogBatchProcess", async () => {
+    AWSMock.setSDKInstance(AWS);
+    AWSMock.mock('SNS', 'publish', () => {
+        console.log('SNS', 'publish', 'mock called');
+    })
+    const product1 = '{"title":"Watch 10","description":"Watch Description 10","price":"12","count":"1","image_url":"https://source.unsplash.com/daily/?watch","image_title":"Watch Description 10"}';
+    const product2 = '{"title":"Watch 12","description":"Watch Description 12","price":"18","count":"0","image_url":"https://source.unsplash.com/daily/?watch","image_title":"Watch Description 12"}';
     const record1 = {
         get body() {
-            return '{"title":"Watch 10","description":"Watch Description 10","price":"12","count":"1","image_url":"https://source.unsplash.com/daily/?watch","image_title":"Watch Description 10"}'
+            return product1;
         }
     };
     const record2 = {
         get body() {
-            return '{"title":"Watch 12","description":"Watch Description 12","price":"18","count":"0","image_url":"https://source.unsplash.com/daily/?watch","image_title":"Watch Description 12"}'
+            return product2;
         }
     };
     const spy1 = jest.spyOn(record1, 'body', 'get');
@@ -45,12 +52,16 @@ test("catalogBatchProcess", async () => {
         ]
     } as SQSEvent;
     const context = {} as Context;
-    Client.connect = jest.fn();
-    Client.query = jest.fn();
-    Client.end = jest.fn();
+    console.log = jest.fn();
 
     await handler.catalogBatchProcess(event, context);
 
+    expect(console.log).toBeCalledWith('event', event);
     expect(spy1).toBeCalledTimes(1);
     expect(spy2).toBeCalledTimes(1);
+    expect(console.log).toBeCalledWith(`adding product ${product1} to db`);
+    expect(console.log).toBeCalledWith(`adding product ${product2} to db`);
+
+
+    AWSMock.restore('SNS');
 });
