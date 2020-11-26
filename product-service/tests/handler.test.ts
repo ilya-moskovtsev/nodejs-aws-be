@@ -1,4 +1,12 @@
 import {APIGatewayEvent, Context, SQSEvent} from "aws-lambda";
+jest.mock("../clients/PostgresClient", () => {
+    return {
+        addProductToDb: () => {
+            console.log('mocked addProductToDb');
+            return Promise.resolve('mocked-product-id');
+        }
+    }
+});
 import * as handler from "../handler";
 import * as AWSMock from "aws-sdk-mock";
 import * as AWS from "aws-sdk";
@@ -59,9 +67,8 @@ test("catalogBatchProcess", async () => {
     expect(console.log).toBeCalledWith('event', event);
     expect(spy1).toBeCalledTimes(1);
     expect(spy2).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith(`Will add ${product1} to db`);
-    expect(console.log).toBeCalledWith(`Will add ${product2} to db`);
-
+    expect(console.log).toBeCalledWith('mocked addProductToDb');
+    expect(console.log).toBeCalledWith('TODO: mock SNS');
 
     AWSMock.restore('SNS');
 });

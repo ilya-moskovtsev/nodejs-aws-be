@@ -37,6 +37,7 @@ export async function catalogBatchProcess(
                                 },
                             },
                         };
+                        console.log('TODO: mock SNS');
                         return sns.publish(publishInput);
                     }
                 } catch (error) {
