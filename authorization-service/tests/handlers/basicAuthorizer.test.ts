@@ -65,6 +65,22 @@ describe('basicAuthorizer', () => {
 
     });
 
+    test("when empty token than 401 Unauthorized", async () => {
+        // @ts-ignore
+        const event = {
+            type: "TOKEN",
+            methodArn: 'arn',
+            authorizationToken: 'Basic '
+        } as APIGatewayTokenAuthorizerEvent;
+        const context = {} as Context;
+
+        handler.basicAuthorizer(event, context, (arg1, agr2?) => {
+            expect(arg1).toBe('Unauthorized');
+            expect(agr2).toBe(undefined);
+        });
+
+    });
+
     test("when wrong credentials than 403 Unauthorized", async () => {
         const username = 'username';
         const password = 'password';

@@ -17,7 +17,12 @@ export function basicAuthorizer(
     try {
         const authorizationToken = event.authorizationToken;
 
-        const encodedCredentials = authorizationToken.split(' ')[1];
+        const [scheme, encodedCredentials] = authorizationToken.split(' ');
+        if (scheme !== 'Basic' || !encodedCredentials) {
+            console.log('401 Unauthorized');
+            callback('Unauthorized');
+            return;
+        }
         const buffer = Buffer.from(encodedCredentials, 'base64');
         const [username, password] = buffer.toString('utf8').split(':');
         console.log(`username: ${username} and password: ${password}`);
