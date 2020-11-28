@@ -1,21 +1,19 @@
-import {APIGatewayAuthorizerEvent, APIGatewayProxyResult, Context} from "aws-lambda";
-import {corsHeaders} from "../constants/headers";
+import {APIGatewayTokenAuthorizerEvent, Context} from "aws-lambda";
 
-export async function basicAuthorizer(
-    event: APIGatewayAuthorizerEvent,
-    context: Context
-): Promise<APIGatewayProxyResult> {
+export function basicAuthorizer(
+    event: APIGatewayTokenAuthorizerEvent,
+    context: Context,
+    callback
+) {
     console.log('event', event);
     console.log(process.env.ilya_moskovtsev);
 
     if (event['type'] !== 'TOKEN') {
         console.log('401 Unauthorized');
-        return {
-            statusCode: 401,
-            headers: corsHeaders,
-            body: 'Unauthorized',
-        };
+        callback('Unauthorized');
+        return;
     }
+
     try {
         const authorizationToken = event.authorizationToken;
 
@@ -26,30 +24,15 @@ export async function basicAuthorizer(
 
         const storedUsername = process.env[username];
         const effect = !storedUsername || storedUsername !== password ? 'Deny' : 'Allow';
-
-        if (effect === 'Deny') {
-            return {
-                statusCode: 403,
-                headers: corsHeaders,
-                body: `Unauthorized`,
-            };
-        }
+        console.log(`effect: ${effect}`);
 
         const policy = generatePolicy(encodedCredentials, event.methodArn, effect);
+        console.log(`policy: ${JSON.stringify(policy)}`);
 
-        return {
-            statusCode: 200,
-            headers: corsHeaders,
-            body: JSON.stringify(policy),
-        };
+        callback(null, policy);
     } catch (e) {
-        return {
-            statusCode: 401,
-            headers: corsHeaders,
-            body: `Unauthorized: ${e.message}`,
-        };
+        callback(`Error: ${e.message}`);
     }
-
 }
 
 function generatePolicy(encodedCredentials: string, methodArn: string, effect: string = 'Deny') {
