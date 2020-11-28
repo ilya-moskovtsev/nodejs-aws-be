@@ -13,6 +13,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
+  profile: iam_admin_user
   stage: dev
   region: us-east-1
   # To load environment variables externally
