@@ -23,6 +23,11 @@ provider:
   environment:
     ilya_moskovtsev: ${env:ilya_moskovtsev}
 
+resources:
+  Outputs:
+    authArn:
+      Value: ${self:custom.AUTH_ARN}
+
 functions:
   basicAuthorizer:
     handler: handler.basicAuthorizer
@@ -30,3 +35,7 @@ functions:
 custom:
   bundle:
     linting: false
+  AUTH_ARN:
+    Fn::GetAtt:
+      - BasicAuthorizerLambdaFunction
+      - Arn
