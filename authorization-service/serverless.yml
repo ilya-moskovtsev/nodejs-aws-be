@@ -19,9 +19,8 @@ provider:
   # rename env.example to .env and uncomment
   # the following line. Also, make sure to not
   # commit your .env.
-  #
-  #environment:
-  #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
+  environment:
+    ilya_moskovtsev: ${env:ilya_moskovtsev}
 
 functions:
   basicAuthorizer:

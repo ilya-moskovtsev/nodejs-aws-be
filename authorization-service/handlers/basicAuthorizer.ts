@@ -7,6 +7,7 @@ export async function basicAuthorizer(
 ): Promise<APIGatewayProxyResult> {
     console.log('event', event);
     console.log('event.body', event.body);
+    console.log(process.env.ilya_moskovtsev);
 
     return {
         statusCode: 200,
