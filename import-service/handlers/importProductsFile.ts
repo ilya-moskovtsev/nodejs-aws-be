@@ -26,12 +26,11 @@ export async function importProductsFile(
     try {
         const filePath = `uploaded/${name}`;
 
-        const s3 = new S3({region: 'us-east-1'});
+        const s3 = new S3({region: process.env.REGION, signatureVersion: "v4"});
         const params = {
             Bucket: BUCKET,
             Key: filePath,
             Expires: 60,
-            ContentType: 'text/csv',
         };
 
         return new Promise((resolve, reject) => {
