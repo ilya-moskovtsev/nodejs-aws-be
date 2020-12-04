@@ -44,6 +44,24 @@ resources:
       Properties:
         QueueName: catalogBatchProcess
         ReceiveMessageWaitTimeSeconds: 20
+    GatewayResponseDenied:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+        ResponseType: ACCESS_DENIED
+        RestApiId: !Ref ApiGatewayRestApi
+    GatewayResponseUnauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+        ResponseType: UNAUTHORIZED
+        RestApiId: !Ref ApiGatewayRestApi
   Outputs:
     sqsArn:
       Value: ${self:custom.SQS_ARN}
@@ -60,6 +78,12 @@ functions:
               querystrings:
                 name: true
           cors: true
+          authorizer:
+            name: basicAuthorizer
+            arn: ${self:custom.AUTH_ARN}
+            resultTtlInSeconds: 0
+            identifySource: method.request.header.Authorization
+            type: token
   importFileParser:
     handler: handler.importFileParser
     events:
@@ -79,3 +103,4 @@ custom:
     Fn::GetAtt:
       - SQS
       - Arn
+  AUTH_ARN: ${cf:authorization-service-${self:provider.stage}.authArn}
