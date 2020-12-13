@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
     const recipientServiceName = slug[0]
     const recipientServiceUrl = process.env[recipientServiceName]
-    const input = `${recipientServiceUrl}/${slug[1]}`
+    const input = `${recipientServiceUrl}/${slug[1]}/${slug[2] || ''}`
 
     if (!recipientServiceUrl) {
         res.status(502).end(`Cannot process request`)
