@@ -2,6 +2,7 @@ export default async function handler(req, res) {
     const {
         query: {slug},
         method,
+        body
     } = req
 
     const recipientServiceName = slug[0]
@@ -24,7 +25,13 @@ export default async function handler(req, res) {
             }
             break
         case 'POST':
-            res.status(200).json({body: 'Not implemented'})
+            const servicePostResponse = await fetch(input,
+                {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(body),
+                })
+            res.status(servicePostResponse.status).end(await servicePostResponse.text())
             break
         default:
             res.setHeader('Allow', ['GET', 'POST'])
