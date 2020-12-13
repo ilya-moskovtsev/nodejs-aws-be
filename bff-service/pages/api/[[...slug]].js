@@ -16,8 +16,12 @@ export default async function handler(req, res) {
     switch (method) {
         case 'GET':
             const serviceResponse = await fetch(input)
-            const json = await serviceResponse.json()
-            res.status(200).json(json)
+            if (serviceResponse.status === 200) {
+                const json = await serviceResponse.json()
+                res.status(200).json(json)
+            } else {
+                res.status(serviceResponse.status).end(await serviceResponse.text())
+            }
             break
         case 'POST':
             res.status(200).json({body: 'Not implemented'})
