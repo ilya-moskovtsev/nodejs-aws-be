@@ -33,8 +33,16 @@ export default async function handler(req, res) {
                 })
             res.status(servicePostResponse.status).end(await servicePostResponse.text())
             break
+        case 'PUT':
+            const servicePutResponse = await fetch(input, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body),
+            })
+            res.status(servicePutResponse.status).json(await servicePutResponse.json())
+            break
         default:
-            res.setHeader('Allow', ['GET', 'POST'])
+            res.setHeader('Allow', ['GET', 'POST', 'PUT'])
             res.status(405).end(`Method ${method} Not Allowed`)
     }
 }
