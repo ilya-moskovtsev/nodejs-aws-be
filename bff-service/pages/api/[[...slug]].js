@@ -1,3 +1,6 @@
+const cache = require('memory-cache')
+const twoMinutes = 1000 * 60 * 2
+
 export default async function handler(req, res) {
     const {
         query: {slug},
@@ -8,6 +11,7 @@ export default async function handler(req, res) {
     const recipientServiceName = slug[0]
     const recipientServiceUrl = process.env[recipientServiceName]
     const input = `${recipientServiceUrl}/${slug[1]}/${slug[2] || ''}`
+    const useCache = slug.join() === ['product-service', 'products'].join()
 
     if (!recipientServiceUrl) {
         res.status(502).end(`Cannot process request`)
@@ -16,12 +20,28 @@ export default async function handler(req, res) {
 
     switch (method) {
         case 'GET':
-            const serviceResponse = await fetch(input)
-            if (serviceResponse.status === 200) {
-                const json = await serviceResponse.json()
-                res.status(200).json(json)
+            if (useCache) {
+                const cachedJson = cache.get(input)
+                if (cachedJson) {
+                    res.status(200).json(cachedJson)
+                } else {
+                    const serviceResponse = await fetch(input)
+                    if (serviceResponse.status === 200) {
+                        const json = await serviceResponse.json()
+                        cache.put(input, json, twoMinutes)
+                        res.status(200).json(json)
+                    } else {
+                        res.status(serviceResponse.status).end(await serviceResponse.text())
+                    }
+                }
             } else {
-                res.status(serviceResponse.status).end(await serviceResponse.text())
+                const serviceResponse = await fetch(input)
+                if (serviceResponse.status === 200) {
+                    const json = await serviceResponse.json()
+                    res.status(200).json(json)
+                } else {
+                    res.status(serviceResponse.status).end(await serviceResponse.text())
+                }
             }
             break
         case 'POST':
